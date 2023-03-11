@@ -17,13 +17,15 @@ public class ArticleController {
     @GetMapping("/hotArticleList")
     public ResponseResult hotArticleList(){
 
-       ResponseResult result=articleService.hotArticleList();
-        return result;
+       return articleService.hotArticleList();
+
     }
-//@GetMapping("/list")
-//public List<Article> test(){
-//    return articleService.list();
-//}
+
+    @GetMapping("/articleList")
+    public ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId){
+        return articleService.articleList(pageNum,pageSize,categoryId);
+
+    }
 
 
 }

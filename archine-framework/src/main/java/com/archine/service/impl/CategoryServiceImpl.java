@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -40,10 +42,27 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         Set<Long> categoryIds  = articleList.stream()
                 .map(article -> article.getCategoryId())
                 .collect(Collectors.toSet());
+//        Set<Long> categoryIds = articleList.stream()
+//                .map(new Function<Article, Long>() {
+//                    @Override
+//                    public Long apply(Article article) {
+//                        return article.getCategoryId();
+//                    }
+//                })
+//                .collect(Collectors.toSet());
         //查询分类表
         List<Category> categories = listByIds(categoryIds);
+        //必须是正常状态的分类
         categories = categories.stream().filter(category -> SystemConstants.STATUS_NORMAL.equals(category.getStatus()))
                 .collect(Collectors.toList());
+//        List<Category> categories = listByIds(categoryIds);
+//         categories = categories.stream().
+//                filter(new Predicate<Category>() {
+//                    @Override
+//                    public boolean test(Category category) {
+//                        return category.getStatus().equals(SystemConstants.STATUS_NORMAL);
+//                    }
+//                }).collect(Collectors.toList());
 
         //封装vo
         List<CategoryVo> categoryVos = BeanCopyUtils.copuBeanList(categories, CategoryVo.class);

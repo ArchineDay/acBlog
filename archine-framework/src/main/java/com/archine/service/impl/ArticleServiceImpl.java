@@ -4,6 +4,7 @@ import com.archine.constants.SystemConstants;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Article;
 import com.archine.domain.entity.Category;
+import com.archine.domain.vo.ArticleDetailVo;
 import com.archine.domain.vo.ArticleListVo;
 import com.archine.domain.vo.HotArticleVo;
 import com.archine.domain.vo.PageVo;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>implements ArticleService {
@@ -67,15 +70,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         //分页查询
         Page<Article> page = new Page<>(pageNum,pageSize);
         page(page,lambdaQueryWrapper);
+
         //查询categoryName
         List<Article> articles = page.getRecords();
+        articles.stream()
+                .map( article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                .collect(Collectors.toList());
         //articleId去查询articleName
-        for (Article article : articles) {
-            //拿article表中的id去category中找对应的name
-            Category category = categoryService.getById(article.getCategoryId());
-            article.setCategoryName(category.getName());
-
-        }
+//        for (Article article : articles) {
+//            //拿article表中的id去category中找对应的name
+//            Category category = categoryService.getById(article.getCategoryId());
+//            article.setCategoryName(category.getName());
+//        }
         //封装查询结果为vo
         List<ArticleListVo> articleListVos = BeanCopyUtils.copuBeanList(page.getRecords(), ArticleListVo.class);
 
@@ -83,4 +89,22 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         PageVo pageVo = new PageVo(articleListVos,page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
+
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        //根据id查询文章
+        Article article = getById(id);
+        //转换成vo
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+        //根据分类id查询对应分类名称
+        Long categoryId = articleDetailVo.getCategoryId();
+        Category category = categoryService.getById(categoryId);
+        if (categoryId!=null){
+            articleDetailVo.setCategoryName(category.getName());
+        }
+        //封装响应返回
+        return ResponseResult.okResult(articleDetailVo);
+    }
+
+
 }

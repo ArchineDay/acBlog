@@ -17,4 +17,5 @@ public class SystemConstants
      * 友链审核通过
      */
     public static final String LINK_STATUS_NORMAL="0";
+    public static final String ROOT_NORMAL="-1";
 }

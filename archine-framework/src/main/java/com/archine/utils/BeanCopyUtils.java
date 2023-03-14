@@ -23,7 +23,7 @@ public class BeanCopyUtils {
         }
     }
 
-    public static <V,O> List<V> copuBeanList(List<O> list,Class<V> clazz){
+    public static <V,O> List<V> copyBeanList(List<O> list,Class<V> clazz){
         return list.stream()
                 .map(o -> copyBean(o, clazz))
                 .collect(Collectors.toList());

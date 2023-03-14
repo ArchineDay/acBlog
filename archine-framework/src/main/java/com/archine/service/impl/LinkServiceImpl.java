@@ -30,7 +30,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
         queryWrapper.eq(Link::getStatus, SystemConstants.LINK_STATUS_NORMAL);
         List<Link> links = list(queryWrapper);
         //转换成vo
-        List<LinkVo> LinkVos = BeanCopyUtils.copuBeanList(links, LinkVo.class);
+        List<LinkVo> LinkVos = BeanCopyUtils.copyBeanList(links, LinkVo.class);
         //封装返回
 
         return ResponseResult.okResult(LinkVos);

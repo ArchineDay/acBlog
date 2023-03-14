@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>implements ArticleService {
     @Autowired
     private CategoryService categoryService;
+
     @Override
     public ResponseResult hotArticleList() {
         //查询热门文章封装成ResponseResult返回
@@ -51,7 +52,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
 //            BeanUtils.copyProperties(article,vo);
 //            articleVos.add(vo);
 //        }
-        List<HotArticleVo> hotArticleVos = BeanCopyUtils.copuBeanList(articles, HotArticleVo.class);
+        List<HotArticleVo> hotArticleVos = BeanCopyUtils.copyBeanList(articles, HotArticleVo.class);
 
         return ResponseResult.okResult(hotArticleVos);
 
@@ -83,7 +84,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
 //            article.setCategoryName(category.getName());
 //        }
         //封装查询结果为vo
-        List<ArticleListVo> articleListVos = BeanCopyUtils.copuBeanList(page.getRecords(), ArticleListVo.class);
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
 
 
         PageVo pageVo = new PageVo(articleListVos,page.getTotal());

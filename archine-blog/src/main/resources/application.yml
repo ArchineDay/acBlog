@@ -14,11 +14,11 @@ spring:
     #redis数据库索引（默认为0）
     database: 0
     #redis服务器地址
-    host: localhost
+    host: 47.100.84.35
     #redis端口
     post: 6379
     #Redis服务器连接密码
-    password:
+    password: pwd123
     pool:
       # 连接池最大连接数（使用负值表示没有限制）
       max-active: 200

@@ -3,7 +3,6 @@ package com.archine.mapper;
 import com.archine.domain.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-
 /**
  * 用户表(User)表数据库访问层
  *

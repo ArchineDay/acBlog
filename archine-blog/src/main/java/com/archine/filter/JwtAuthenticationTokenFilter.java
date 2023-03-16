@@ -23,7 +23,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
+
     @Autowired
     private RedisCache redisCache;
 
@@ -36,13 +37,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        //解析获取userId
+        //解析获取userid
         Claims claims = null;
         try {
             claims = JwtUtil.parseJWT(token);
         } catch (Exception e) {
             e.printStackTrace();
-            //token超时或非法
+            //token超时  token非法
             //响应告诉前端需要重新登录
             ResponseResult result = ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
             WebUtils.renderString(response, JSON.toJSONString(result));
@@ -63,6 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);
-
     }
+
+
 }

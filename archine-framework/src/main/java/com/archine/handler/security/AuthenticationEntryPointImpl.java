@@ -1,4 +1,4 @@
-package com.archine.config.handler.security;
+package com.archine.handler.security;
 
 import com.alibaba.fastjson.JSON;
 import com.archine.domain.ResponseResult;

@@ -13,6 +13,7 @@ import com.archine.service.ArticleService;
 import com.archine.service.CategoryService;
 import com.archine.utils.BeanCopyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,6 +31,12 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>implements ArticleService {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ArticleService articleService;
+
+//    @Autowired
+//    private ArticleMapper articleMapper;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -105,6 +112,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         }
         //封装响应返回
         return ResponseResult.okResult(articleDetailVo);
+    }
+
+    @Override
+    public ResponseResult updateViewCount(Long id) {
+        Article article = getById(id);
+        Long viewCount = article.getViewCount();
+        article.setViewCount(viewCount++);
+        articleService.updateById(article);
+
+        return ResponseResult.okResult();
     }
 
 

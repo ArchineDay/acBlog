@@ -1,4 +1,4 @@
-package com.archine.config.handler.exception;
+package com.archine.handler.exception;
 
 import com.archine.domain.ResponseResult;
 import com.archine.enums.AppHttpCodeEnum;

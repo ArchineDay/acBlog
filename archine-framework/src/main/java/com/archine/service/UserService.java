@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 public interface UserService extends IService<User> {
     ResponseResult userInfo();
 
+    ResponseResult updateUserInfo(User user);
+
+    ResponseResult register(User user);
 }
 
 

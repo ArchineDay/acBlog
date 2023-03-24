@@ -33,6 +33,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!--SpringSecurity启动器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -89,6 +90,7 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
         </dependency>
+
 
     </dependencies>
 </project>

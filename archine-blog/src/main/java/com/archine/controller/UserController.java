@@ -1,5 +1,6 @@
 package com.archine.controller;
 
+import com.archine.annotation.SystemLog;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.User;
 import com.archine.service.UserService;
@@ -16,6 +17,7 @@ public class UserController {
         return userService.userInfo();
     }
     @PutMapping("/userInfo")
+    @SystemLog(businessName = "更新用户信息")
     //RequestBody注解表示将请求体中的json数据转换成对象
     public ResponseResult updateUserInfo(@RequestBody User user){
         return userService.updateUserInfo(user);

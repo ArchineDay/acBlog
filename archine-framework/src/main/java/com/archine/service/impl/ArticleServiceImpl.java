@@ -12,6 +12,7 @@ import com.archine.mapper.ArticleMapper;
 import com.archine.service.ArticleService;
 import com.archine.service.CategoryService;
 import com.archine.utils.BeanCopyUtils;
+import com.archine.utils.RedisCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,12 +33,8 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>implements ArticleService {
     @Autowired
     private CategoryService categoryService;
-
     @Autowired
-    private ArticleService articleService;
-
-//    @Autowired
-//    private ArticleMapper articleMapper;
+    private RedisCache redisCache;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -45,12 +43,29 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         //必须是正式文章
         queryWrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
         //按照浏览量进行排序
+        Map<String, Integer> viewCount = redisCache.getCacheMap(SystemConstants.ARTICLE_VIEWCOUNT);
+            //将map转换成list
+        /**
+         * 使用entrySet()方法将Map中的键值对转换为Set<Map.Entry<String, Integer>>对象。
+         * 使用stream()方法将Set对象转换为Stream<Map.Entry<String, Integer>>对象。
+         * 使用map()方法将Stream<Map.Entry<String, Integer>>对象中的每个元素（即键值对）转换为一个Article对象。
+         * 使用了lambda表达式编写转换逻辑，将键转换为文章的ID，将值转换为文章的浏览量。map()方法的返回值是一个Stream<Article>对象。
+         * 使用collect()方法将Stream<Article>对象转换为List<Article>对象，并将其保存在articles变量中。
+         */
+            List<Article> articles = viewCount.entrySet().stream()
+                    .map(entry -> {
+                        Article article = new Article();
+                        article.setId(Long.parseLong(entry.getKey()));
+                        article.setViewCount(Long.valueOf(entry.getValue()));
+                        return article;
+                    }).collect(Collectors.toList());
+            //按照浏览量进行排序
         queryWrapper.orderByDesc(Article::getViewCount);
         //分页只查询10条
         Page<Article> page= new Page(1,10);
         page(page,queryWrapper);
 
-        List<Article> articles = page.getRecords();
+      //  articles = page.getRecords();
 
         //bean拷贝
 //        List<HotArticleVo> articleVos=new ArrayList<>();
@@ -79,10 +94,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         Page<Article> page = new Page<>(pageNum,pageSize);
         page(page,lambdaQueryWrapper);
 
-        //查询categoryName
+        //查询categoryName和viewCount
+
         List<Article> articles = page.getRecords();
+        Map<String, Integer> viewCount = redisCache.getCacheMap(SystemConstants.ARTICLE_VIEWCOUNT);
+        /**
+         * 使用stream()方法将articles列表转换为一个Stream<Article>对象。
+         * 使用map()方法将Stream<Article>对象中的每个元素（即文章）转换为另一个Article对象。
+         * 使用一个lambda表达式来设置文章的类别名称和浏览量属性，并将修改后的article对象返回。
+         */
         articles.stream()
-                .map( article -> article.setCategoryName(categoryService.getById(article.getCategoryId()).getName()))
+                .map( article -> {
+                    article.setCategoryName(categoryService.getById(article.getCategoryId()).getName());
+                    article.setViewCount(Long.valueOf(viewCount.get(article.getId().toString())));
+                    return article;
+                })
                 .collect(Collectors.toList());
         //articleId去查询articleName
 //        for (Article article : articles) {
@@ -91,8 +117,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
 //            article.setCategoryName(category.getName());
 //        }
         //封装查询结果为vo
-        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(page.getRecords(), ArticleListVo.class);
-
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
 
         PageVo pageVo = new PageVo(articleListVos,page.getTotal());
         return ResponseResult.okResult(pageVo);
@@ -102,6 +127,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
     public ResponseResult getArticleDetail(Long id) {
         //根据id查询文章
         Article article = getById(id);
+        Integer viewCount = redisCache.getCacheMapValue(SystemConstants.ARTICLE_VIEWCOUNT, id.toString());
+        article.setViewCount(viewCount.longValue());
         //转换成vo
         ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
         //根据分类id查询对应分类名称
@@ -116,13 +143,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
 
     @Override
     public ResponseResult updateViewCount(Long id) {
-        Article article = getById(id);
-        Long viewCount = article.getViewCount();
-        article.setViewCount(viewCount++);
-        articleService.updateById(article);
-
+        redisCache.incrementCacheMapValue(SystemConstants.ARTICLE_VIEWCOUNT,id.toString(),1);
         return ResponseResult.okResult();
     }
-
 
 }

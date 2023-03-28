@@ -31,6 +31,7 @@ public class ArticleController {
     }
 
     @PostMapping("/updateViewCount/{id}")
+    //PathVariable注解表示将路径中的id参数绑定到方法的参数id上
     public ResponseResult updateViewCount(@PathVariable("id") Long id){
         return articleService.updateViewCount(id);
     }

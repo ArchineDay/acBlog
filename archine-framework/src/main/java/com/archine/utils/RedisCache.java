@@ -201,6 +201,17 @@ public class RedisCache
         return opsForHash.get(key, hKey);
     }
 
+/**
+     * 获取Hash中的数据
+     *
+     * @param key Redis键
+     * @param hKey Hash键
+     * @return Hash中的对象
+     */
+    public void incrementCacheMapValue(String key,String hKey,long v){
+        redisTemplate.boundHashOps(key).increment(hKey, v);
+    }
+
     /**
      * 删除Hash中的数据
      * 

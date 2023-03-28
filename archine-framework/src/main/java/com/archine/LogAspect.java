@@ -70,8 +70,6 @@ public class LogAspect {
         log.info("Request Args   : {}", JSON.toJSON(joinPoint.getArgs()));
 
 
-
-
     }
 
     private SystemLog getSystemLog(ProceedingJoinPoint joinPoint) {

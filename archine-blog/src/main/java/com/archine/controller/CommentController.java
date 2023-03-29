@@ -4,11 +4,13 @@ import com.archine.constants.SystemConstants;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Comment;
 import com.archine.service.CommentService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/comment")
+@Api(tags = "评论接口")
 public class CommentController {
     @Autowired
     private CommentService commentService;

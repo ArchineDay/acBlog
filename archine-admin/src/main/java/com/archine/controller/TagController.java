@@ -1,24 +1,20 @@
 package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
-import com.archine.service.LinkService;
-import com.github.xiaoymin.knife4j.annotations.ApiSort;
-import io.swagger.annotations.Api;
+import com.archine.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/link")
-@Api(tags = "友链接口")
-public class LinkController {
+@RequestMapping("/content/tag")
+public class TagController {
     @Autowired
-    private LinkService linkService;
+    private TagService tagService;
 
-    @GetMapping("/getAllLink")
-    public ResponseResult getAllLink(){
-        return linkService.getAllLink();
-
+    @GetMapping("list")
+    public ResponseResult list(){
+        return ResponseResult.okResult(tagService.list());
     }
 }

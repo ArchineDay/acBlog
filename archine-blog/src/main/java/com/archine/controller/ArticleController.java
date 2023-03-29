@@ -1,6 +1,7 @@
 package com.archine.controller;
 
 import com.archine.service.ArticleService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.archine.domain.ResponseResult;
@@ -8,6 +9,7 @@ import com.archine.domain.ResponseResult;
 
 @RestController
 @RequestMapping("/article")
+@Api(tags = "文章接口")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;

@@ -1,6 +1,7 @@
 package com.archine.service;
 
 import com.archine.domain.entity.Menu;
+import com.archine.domain.vo.MenuVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 public interface MenuService extends IService<Menu> {
 
     List<String> selectPermsByUserId(Long id);
+
+    List<MenuVo> selectRouterMenuTreeByUserId(Long userId);
 }
 
 

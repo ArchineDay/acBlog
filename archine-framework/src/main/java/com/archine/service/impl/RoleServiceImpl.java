@@ -3,6 +3,7 @@ package com.archine.service.impl;
 import com.archine.domain.entity.Role;
 import com.archine.mapper.RoleMapper;
 import com.archine.service.RoleService;
+import com.archine.utils.SecurityUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
         //判断是否是管理员，如果是管理员，返回集合中只需要admin
-        if (id == 1L) {
+        if (SecurityUtils.isAdmin()) {
             List<String> roleKeys = new ArrayList<>();
             roleKeys.add("admin");
             return roleKeys;

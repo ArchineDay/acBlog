@@ -2,8 +2,11 @@ package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.LoginUser;
+import com.archine.domain.entity.Menu;
 import com.archine.domain.entity.User;
 import com.archine.domain.vo.AdminUserInfoVo;
+import com.archine.domain.vo.MenuVo;
+import com.archine.domain.vo.RoutersVo;
 import com.archine.domain.vo.UserInfoVo;
 import com.archine.enums.AppHttpCodeEnum;
 import com.archine.exception.SystemException;
@@ -60,6 +63,14 @@ public  class LoginController {
         AdminUserInfoVo adminUserInfoVo = new AdminUserInfoVo(perms,roleKeyList,userInfoVo);
         return ResponseResult.okResult(adminUserInfoVo);
 
+    }
+    @GetMapping("getRouters")
+    public ResponseResult<RoutersVo> getRouters(){
+        Long userId = SecurityUtils.getUserId();
+        //查询Menu 结果时tree的形式
+        List<MenuVo> menus= menuService.selectRouterMenuTreeByUserId(userId);
+        //封装数据返回
+        return ResponseResult.okResult(new RoutersVo(menus));
     }
 
 

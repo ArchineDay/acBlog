@@ -1,35 +1,20 @@
-package com.archine.domain.entity;
+package com.archine.domain.vo;
 
-import java.util.Date;
-
-import java.io.Serializable;
-import java.util.List;
-
-import com.archine.domain.vo.MenuVo;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.experimental.Accessors;
 
-/**
- * 菜单权限表(Menu)表实体类
- *
- * @author makejava
- * @since 2023-03-30 18:50:37
- */
-@SuppressWarnings("serial")
+import java.util.Date;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("sys_menu")
 @Accessors(chain = true)
-public class Menu  {
-    //菜单ID@TableId
+public class MenuVo {
+    //菜单ID
     private Long id;
-
     //菜单名称
     private String menuName;
     //父菜单ID
@@ -52,19 +37,9 @@ public class Menu  {
     private String perms;
     //菜单图标
     private String icon;
-    //创建者
-    private Long createBy;
+
     //创建时间
     private Date createTime;
-    //更新者
-    private Long updateBy;
-    //更新时间
-    private Date updateTime;
-    //备注
-    private String remark;
-    
-    private String delFlag;
 
+    private List<MenuVo> Children;
 }
-
-

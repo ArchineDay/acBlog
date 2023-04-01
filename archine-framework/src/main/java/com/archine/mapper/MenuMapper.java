@@ -1,6 +1,7 @@
 package com.archine.mapper;
 
 import com.archine.domain.entity.Menu;
+import com.archine.domain.vo.MenuVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;
@@ -14,7 +15,11 @@ import java.util.List;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
-     List<String> selectPermsByUserId(Long id);
+    List<MenuVo> selectAllRouterMenu();
+
+    List<MenuVo> selectRouterMenuByUserId(Long userId);
+
+    List<String> selectPermsByUserId(Long id);
 }
 
 

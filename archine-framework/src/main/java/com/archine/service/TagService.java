@@ -16,6 +16,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface TagService extends IService<Tag> {
 
     ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
+
+    ResponseResult addTag(Tag tag);
+    
+
+    ResponseResult deleteTag(Long id);
+
+    ResponseResult getTag(Long id);
+
+    ResponseResult updateTag(Tag tag);
 }
 
 

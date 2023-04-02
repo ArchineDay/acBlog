@@ -2,7 +2,10 @@ package com.archine.service;
 
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Category;
+import com.archine.domain.vo.CategoryVo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 
 /**
@@ -14,6 +17,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface CategoryService extends IService<Category> {
 
     ResponseResult getCategoryList();
+
+    ResponseResult listAllCategory();
 }
 
 

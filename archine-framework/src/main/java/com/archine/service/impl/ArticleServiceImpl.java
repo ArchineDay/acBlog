@@ -2,7 +2,9 @@ package com.archine.service.impl;
 
 import com.archine.constants.SystemConstants;
 import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.AddArticleDto;
 import com.archine.domain.entity.Article;
+import com.archine.domain.entity.ArticleTag;
 import com.archine.domain.entity.Category;
 import com.archine.domain.vo.ArticleDetailVo;
 import com.archine.domain.vo.ArticleListVo;
@@ -10,6 +12,7 @@ import com.archine.domain.vo.HotArticleVo;
 import com.archine.domain.vo.PageVo;
 import com.archine.mapper.ArticleMapper;
 import com.archine.service.ArticleService;
+import com.archine.service.ArticleTagService;
 import com.archine.service.CategoryService;
 import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.RedisCache;
@@ -35,6 +38,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
     private CategoryService categoryService;
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    private ArticleTagService articleTagService;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -144,6 +150,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
     @Override
     public ResponseResult updateViewCount(Long id) {
         redisCache.incrementCacheMapValue(SystemConstants.ARTICLE_VIEWCOUNT,id.toString(),1);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult addArticle(AddArticleDto articleDto) {
+        //添加博客
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        save(article);
+
+        //添加博客和标签关联
+        List<ArticleTag> articleTags = articleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+        articleTagService.saveBatch(articleTags);
         return ResponseResult.okResult();
     }
 

@@ -42,3 +42,10 @@ mybatis-plus:
       logic-not-delete-value: 0
       id-type: auto
 
+aliyun:
+  oss:
+    accessKeyId: LTAI5tFZXiBAvKdWKZhMk6bz
+    accessKeySecret: tgUN01dKasAKHcl9HHoqeF30yJGOU0
+    bucketName: dxq-images
+    endpoint: http://oss-cn-shanghai.aliyuncs.com/
+    firstKey: Archine/img/202110220058551.png

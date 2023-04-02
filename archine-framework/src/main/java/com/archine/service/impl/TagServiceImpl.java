@@ -78,6 +78,15 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         return ResponseResult.okResult();
     }
 
+    @Override
+    public ResponseResult listAllTag() {
+        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Tag> tagsWrapper = queryWrapper.select(Tag::getId, Tag::getName);
+        List<Tag> tagList = list(tagsWrapper);
+        List<TagVo> tagVos = BeanCopyUtils.copyBeanList(tagList, TagVo.class);
+        return ResponseResult.okResult(tagVos);
+    }
+
 
 }
 

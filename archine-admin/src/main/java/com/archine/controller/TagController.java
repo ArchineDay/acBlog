@@ -31,11 +31,16 @@ public class TagController {
     }
 
     @GetMapping("/{id}")
+    //PathVariable 用于获取url中的数据
     public ResponseResult getTag(@PathVariable("id") Long id ){
         return tagService.getTag(id);
     }
     @PutMapping
     public ResponseResult updateTag(@RequestBody Tag tag){
         return tagService.updateTag(tag);
+    }
+    @GetMapping("/listAllTag")
+    public ResponseResult listAllTag(){
+        return tagService.listAllTag();
     }
 }

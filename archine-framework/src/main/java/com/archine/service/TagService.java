@@ -1,6 +1,9 @@
 package com.archine.service;
 
+import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.TagListDto;
 import com.archine.domain.entity.Tag;
+import com.archine.domain.vo.PageVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
@@ -12,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface TagService extends IService<Tag> {
 
+    ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto);
 }
 
 

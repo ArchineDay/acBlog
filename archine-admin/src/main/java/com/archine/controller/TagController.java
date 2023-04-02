@@ -1,6 +1,8 @@
 package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.TagListDto;
+import com.archine.domain.vo.PageVo;
 import com.archine.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,7 @@ public class TagController {
     private TagService tagService;
 
     @GetMapping("list")
-    public ResponseResult list(){
-        return ResponseResult.okResult(tagService.list());
+    public ResponseResult<PageVo> list(Integer pageNum, Integer pageSize, TagListDto tagListDto){
+        return tagService.pageTagList(pageNum,pageSize,tagListDto);
     }
 }

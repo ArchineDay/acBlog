@@ -9,6 +9,7 @@ import com.archine.service.LoginService;
 import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.JwtUtil;
 import com.archine.utils.RedisCache;
+import com.archine.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,6 +50,14 @@ public class SystemLoginServiceImpl implements LoginService {
 
 
         return ResponseResult.okResult(map);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        //获取当前登录用户
+        Long userId = SecurityUtils.getUserId();
+        redisCache.deleteObject("login:"+userId);
+        return ResponseResult.okResult();
     }
 
 }

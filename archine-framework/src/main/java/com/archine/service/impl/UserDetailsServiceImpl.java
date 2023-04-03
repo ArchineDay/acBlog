@@ -1,7 +1,9 @@
 package com.archine.service.impl;
 
+import com.archine.constants.SystemConstants;
 import com.archine.domain.entity.LoginUser;
 import com.archine.domain.entity.User;
+import com.archine.mapper.MenuMapper;
 import com.archine.mapper.UserMapper;
 import com.archine.service.UserService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -20,6 +23,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //    private UserMapper userMapper;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MenuMapper menuMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,7 +38,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new RuntimeException("用户不存在");
         }
         //返回用户信息
-        // TODO 查询权限信息封装
-        return new LoginUser(user);
+        //  查询权限信息封装
+        if (user.getType().equals(SystemConstants.ADMIN)){
+            List<String> list = menuMapper.selectPermsByUserId(user.getId());
+            return new LoginUser(user,list);
+        }
+        return new LoginUser(user,null);
     }
 }

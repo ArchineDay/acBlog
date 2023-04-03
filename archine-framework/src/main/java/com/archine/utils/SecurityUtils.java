@@ -2,9 +2,10 @@ package com.archine.utils;
 
 
 import com.archine.domain.entity.LoginUser;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityUtils
 {
 

@@ -181,9 +181,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         lambdaQueryWrapper.like(StringUtils.hasText(articleListDto.getTitle()),Article::getTitle,articleListDto.getTitle());
         lambdaQueryWrapper.like(StringUtils.hasText(articleListDto.getSummary()),Article::getSummary,articleListDto.getSummary());
 
-        Page<Article> page = new Page<>();
-        page.setCurrent(pageNum);
-        page.setSize(pageSize);
+//        Page<Article> page = new Page<>();
+//        page.setCurrent(pageNum);
+//        page.setSize(pageSize);
+// 上述无参构造方法默认是第一页，每页10条，使用set可设置
+        Page<Article> page = new Page<>(pageNum,pageSize);
+
         page(page,lambdaQueryWrapper);
         List<Article> articles = page.getRecords();
 

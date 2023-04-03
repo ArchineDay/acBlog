@@ -3,6 +3,7 @@ package com.archine.service.impl;
 import com.archine.constants.SystemConstants;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.dto.AddArticleDto;
+import com.archine.domain.dto.ArticleListDto;
 import com.archine.domain.entity.Article;
 import com.archine.domain.entity.ArticleTag;
 import com.archine.domain.entity.Category;
@@ -24,6 +25,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
 
     @Autowired
     private ArticleTagService articleTagService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -166,5 +171,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         articleTagService.saveBatch(articleTags);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult<PageVo> getArticleList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto) {
+
+        LambdaQueryWrapper<Article> lambdaQueryWrapper=new LambdaQueryWrapper<>();
+        //查询条件
+       // lambdaQueryWrapper.eq(Article::getDelFlag,SystemConstants.STATUS_NORMAL);
+        lambdaQueryWrapper.like(StringUtils.hasText(articleListDto.getTitle()),Article::getTitle,articleListDto.getTitle());
+        lambdaQueryWrapper.like(StringUtils.hasText(articleListDto.getSummary()),Article::getSummary,articleListDto.getSummary());
+
+        Page<Article> page = new Page<>();
+        page.setCurrent(pageNum);
+        page.setSize(pageSize);
+        page(page,lambdaQueryWrapper);
+        List<Article> articles = page.getRecords();
+
+        List<Article> articleList = BeanCopyUtils.copyBeanList(articles, Article.class);
+
+        //转换成vo
+        PageVo pageVo = new PageVo(articleList, page.getTotal());
+        return ResponseResult.okResult(pageVo);
+    }
+
 
 }

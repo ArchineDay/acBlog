@@ -1,5 +1,7 @@
 package com.archine.service;
 
+import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.RoleDto;
 import com.archine.domain.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -15,6 +17,8 @@ import java.util.List;
 public interface RoleService extends IService<Role> {
 
     List<String> selectRoleKeyByUserId(Long id);
+
+    ResponseResult getList(Integer pageNum, Integer pageSize, RoleDto roleDto);
 }
 
 

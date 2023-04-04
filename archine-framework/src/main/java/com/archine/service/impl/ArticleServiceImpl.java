@@ -7,18 +7,18 @@ import com.archine.domain.dto.ArticleListDto;
 import com.archine.domain.entity.Article;
 import com.archine.domain.entity.ArticleTag;
 import com.archine.domain.entity.Category;
-import com.archine.domain.vo.ArticleDetailVo;
-import com.archine.domain.vo.ArticleListVo;
-import com.archine.domain.vo.HotArticleVo;
-import com.archine.domain.vo.PageVo;
+import com.archine.domain.entity.Tag;
+import com.archine.domain.vo.*;
 import com.archine.mapper.ArticleMapper;
 import com.archine.service.ArticleService;
 import com.archine.service.ArticleTagService;
 import com.archine.service.CategoryService;
+import com.archine.service.TagService;
 import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.RedisCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -43,9 +43,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
 
     @Autowired
     private ArticleTagService articleTagService;
-
-    @Autowired
-    private ArticleService articleService;
 
     @Override
     public ResponseResult hotArticleList() {
@@ -138,6 +135,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
     public ResponseResult getArticleDetail(Long id) {
         //根据id查询文章
         Article article = getById(id);
+        //根据id查询标签
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleTag::getArticleId, id);
+        List<ArticleTag> articleTags = articleTagService.list(queryWrapper);
+        //获取标签id
+        List<Long> tagId = articleTags.stream()
+                        . map(ArticleTag::getTagId)
+                        .collect(Collectors.toList());
+
+        ArticleVo articleVo = BeanCopyUtils.copyBean(article, ArticleVo.class);
+        articleVo.setTags(tagId);
+
+        return ResponseResult.okResult(articleVo);
+    }
+
+    @Override
+    public ResponseResult articleDetail(Long id) {
+        //根据id查询文章
+        Article article = getById(id);
         Integer viewCount = redisCache.getCacheMapValue(SystemConstants.ARTICLE_VIEWCOUNT, id.toString());
         article.setViewCount(viewCount.longValue());
         //转换成vo
@@ -151,6 +167,36 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         //封装响应返回
         return ResponseResult.okResult(articleDetailVo);
     }
+
+    @Override
+    public ResponseResult updateArticle(AddArticleDto articleDto) {
+        //根据id查询文章
+        LambdaQueryWrapper<Article> articleWrapper = new LambdaQueryWrapper<>();
+        articleWrapper.eq(Article::getId,articleDto.getId());
+        Article article = BeanCopyUtils.copyBean(articleDto, Article.class);
+        update(article,articleWrapper);
+
+        //更新博客和标签的关联
+        List<ArticleTag> articleTags = articleDto.getTags().stream()
+                .map(tagId -> new ArticleTag(article.getId(), tagId))
+                .collect(Collectors.toList());
+        //先删除原来的关联
+        LambdaQueryWrapper<ArticleTag> articleTagWrapper = new LambdaQueryWrapper<>();
+        articleTagWrapper.eq(ArticleTag::getArticleId,articleDto.getId());
+        articleTagService.remove(articleTagWrapper);
+        //再添加新的关联
+        articleTagService.saveBatch(articleTags);
+
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult deleteArticle(Long id) {
+        //删除文章
+        removeById(id);
+        return ResponseResult.okResult();
+    }
+
 
     @Override
     public ResponseResult updateViewCount(Long id) {
@@ -169,6 +215,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
                 .map(tagId -> new ArticleTag(article.getId(), tagId))
                 .collect(Collectors.toList());
         articleTagService.saveBatch(articleTags);
+
         return ResponseResult.okResult();
     }
 
@@ -192,10 +239,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
 
         List<Article> articleList = BeanCopyUtils.copyBeanList(articles, Article.class);
 
-        //转换成vo
+        //使用vo封装
         PageVo pageVo = new PageVo(articleList, page.getTotal());
         return ResponseResult.okResult(pageVo);
     }
-
 
 }

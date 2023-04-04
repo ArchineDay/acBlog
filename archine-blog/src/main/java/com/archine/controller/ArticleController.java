@@ -28,8 +28,8 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseResult getArticleDetail(@PathVariable ("id") Long id){
-        return articleService.getArticleDetail(id);
+    public ResponseResult articleDetail(@PathVariable ("id") Long id){
+        return articleService.articleDetail(id);
     }
 
     @PostMapping("/updateViewCount/{id}")

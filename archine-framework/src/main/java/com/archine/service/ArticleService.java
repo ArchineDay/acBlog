@@ -4,6 +4,8 @@ import com.archine.domain.ResponseResult;
 import com.archine.domain.dto.AddArticleDto;
 import com.archine.domain.dto.ArticleListDto;
 import com.archine.domain.entity.Article;
+import com.archine.domain.vo.ArticleVo;
+import com.archine.domain.vo.PageVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface ArticleService extends IService<Article> {
@@ -14,5 +16,11 @@ public interface ArticleService extends IService<Article> {
 
     ResponseResult addArticle(AddArticleDto article);
 
-    ResponseResult getArticleList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto);
+    ResponseResult<PageVo> getArticleList(Integer pageNum, Integer pageSize, ArticleListDto articleListDto);
+
+    ResponseResult articleDetail(Long id);
+
+    ResponseResult updateArticle(AddArticleDto articleDto);
+
+    ResponseResult deleteArticle(Long id);
 }

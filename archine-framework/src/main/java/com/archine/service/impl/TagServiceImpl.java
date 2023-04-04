@@ -33,7 +33,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public ResponseResult<PageVo> pageTagList(Integer pageNum, Integer pageSize, TagListDto tagListDto) {
         //分页查询
-        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper();
+        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.hasText(tagListDto.getName()),Tag::getName, tagListDto.getName());
         queryWrapper.like(StringUtils.hasText(tagListDto.getRemark()),Tag::getRemark, tagListDto.getRemark());
 

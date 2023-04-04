@@ -1,14 +1,17 @@
 package com.archine.service.impl;
 
 import com.archine.constants.SystemConstants;
+import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Menu;
 import com.archine.domain.vo.MenuVo;
 import com.archine.mapper.MenuMapper;
 import com.archine.service.MenuService;
+import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,6 +61,23 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<MenuVo> menuTree = buildMenuTree(menus,0L);
         return menuTree;
     }
+
+    @Override
+    public ResponseResult getList(String status, String menuName) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        //针对菜单名进行模糊查询
+        queryWrapper.like(StringUtils.hasText(menuName),Menu::getMenuName,menuName);
+        //针对菜单状态进行查询
+        queryWrapper.like(StringUtils.hasText(status),Menu::getStatus,status);
+
+        //菜单要按照父菜单id和orderNum进行排序
+        LambdaQueryWrapper<Menu> wrapper = queryWrapper.orderByAsc(Menu::getParentId, Menu::getOrderNum);
+        //封装成menuVo
+        List<Menu> menuList = list(wrapper);
+        List<MenuVo> menuVoList = BeanCopyUtils.copyBeanList(menuList, MenuVo.class);
+        return ResponseResult.okResult(menuVoList);
+    }
+
 
     private List<MenuVo> buildMenuTree(List<MenuVo> menus, long parentId) {
         List<MenuVo> menuTree = menus.stream()

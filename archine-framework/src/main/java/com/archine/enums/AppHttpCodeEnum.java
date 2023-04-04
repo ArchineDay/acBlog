@@ -1,5 +1,7 @@
 package com.archine.enums;
 
+import com.archine.domain.entity.Menu;
+
 public enum AppHttpCodeEnum {
     // 成功
     SUCCESS(200,"操作成功"),
@@ -18,7 +20,8 @@ public enum AppHttpCodeEnum {
     NICKNAME_NOT_NULL(509,"昵称不能为空" ),
     PASSWORD_NOT_NULL(510,"用密码不能为空" ),
     EMAIL_NOT_NULL(511,"邮箱不能为空" ), NICKNAME_EXIST(512,"昵称已存在" ),
-    TAG_EXIST(512,"标签已存在" );
+    TAG_EXIST(512,"标签已存在" ),
+    PARENT_MENU_ERROR(513,"修改菜单失败，上级菜单不能选择自己" ), HAS_CHILDREN_MENU_ERROR(514,"存在子菜单不允许删除" );
     int code;
     String msg;
 

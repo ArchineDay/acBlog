@@ -4,11 +4,13 @@ import com.archine.constants.SystemConstants;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Menu;
 import com.archine.domain.vo.MenuVo;
+import com.archine.enums.AppHttpCodeEnum;
 import com.archine.mapper.MenuMapper;
 import com.archine.service.MenuService;
 import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,8 +26,6 @@ import java.util.stream.Collectors;
  */
 @Service("menuService")
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
-//    @Autowired
-//    private MenuMapper menuMapper;
 
     @Override
     public List<String> selectPermsByUserId(Long id) {
@@ -68,7 +68,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         //针对菜单名进行模糊查询
         queryWrapper.like(StringUtils.hasText(menuName),Menu::getMenuName,menuName);
         //针对菜单状态进行查询
-        queryWrapper.like(StringUtils.hasText(status),Menu::getStatus,status);
+        queryWrapper.eq(StringUtils.hasText(status),Menu::getStatus,status);
 
         //菜单要按照父菜单id和orderNum进行排序
         LambdaQueryWrapper<Menu> wrapper = queryWrapper.orderByAsc(Menu::getParentId, Menu::getOrderNum);
@@ -76,6 +76,44 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         List<Menu> menuList = list(wrapper);
         List<MenuVo> menuVoList = BeanCopyUtils.copyBeanList(menuList, MenuVo.class);
         return ResponseResult.okResult(menuVoList);
+    }
+
+    @Override
+    public ResponseResult addMenu(Menu menu) {
+        save(menu);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult updateMenu(Menu menu){
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        //如果把父菜单设置为当前菜单
+        if (menu.getParentId().equals(menu.getId())){
+           return ResponseResult.errorResult(AppHttpCodeEnum.PARENT_MENU_ERROR);
+        }
+        update(menu,queryWrapper.eq(Menu::getId,menu.getId()));
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getMenu(Long id) {
+        Menu menu = getById(id);
+        return ResponseResult.okResult(menu);
+    }
+
+    @Override
+    public ResponseResult deleteMenu(Long id) {
+       //如果存在子菜单不允许删除
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+        //父菜单id等于当前菜单id，则有子菜单
+        queryWrapper.eq(Menu::getParentId,id);
+        int count = count(queryWrapper);
+        if (count>0){
+            return ResponseResult.errorResult(AppHttpCodeEnum.HAS_CHILDREN_MENU_ERROR);
+        }
+        //删除菜单
+        removeById(id);
+        return ResponseResult.okResult();
     }
 
 

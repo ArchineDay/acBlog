@@ -1,13 +1,11 @@
 package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
+import com.archine.domain.entity.Menu;
 import com.archine.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.QueryAnnotation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/system/menu")
@@ -20,5 +18,23 @@ public class MenuController {
 
         return menuService.getList(status,menuName);
     }
+    @PostMapping
+    public ResponseResult addMenu(@RequestBody Menu menu){
+        return menuService.addMenu(menu);
+    }
 
+    @PutMapping
+    public ResponseResult updateMenu(@RequestBody Menu menu){
+        return menuService.updateMenu(menu);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult getMenu(@PathVariable Long id){
+        return menuService.getMenu(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseResult deleteMenu(@PathVariable Long id){
+        return menuService.deleteMenu(id);
+    }
 }

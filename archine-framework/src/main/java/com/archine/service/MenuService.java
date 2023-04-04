@@ -21,6 +21,14 @@ public interface MenuService extends IService<Menu> {
     List<MenuVo> selectRouterMenuTreeByUserId(Long userId);
 
     ResponseResult getList(String status, String menuName);
+
+    ResponseResult addMenu(Menu menu);
+
+    ResponseResult updateMenu(Menu menu) throws RuntimeException;
+
+    ResponseResult getMenu(Long id);
+
+    ResponseResult deleteMenu(Long id);
 }
 
 

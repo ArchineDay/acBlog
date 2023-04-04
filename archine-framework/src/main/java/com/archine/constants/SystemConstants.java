@@ -1,5 +1,7 @@
 package com.archine.constants;
 
+import com.archine.enums.AppHttpCodeEnum;
+
 public class SystemConstants
 {
     /**

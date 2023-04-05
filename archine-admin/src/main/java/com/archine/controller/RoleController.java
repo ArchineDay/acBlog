@@ -5,9 +5,7 @@ import com.archine.domain.dto.RoleDto;
 import com.archine.domain.vo.PageVo;
 import com.archine.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/system/role")
@@ -18,7 +16,12 @@ public class RoleController {
 
     @GetMapping("/list")
     public ResponseResult<PageVo> getList(Integer pageNum, Integer pageSize, RoleDto roleDto){
-
         return roleService.getList(pageNum,pageSize,roleDto);
+    }
+
+    @PutMapping("/changeStatus")
+    public ResponseResult changeStatus(@RequestBody RoleDto roleDto){
+
+        return roleService.changeStatus(roleDto);
     }
 }

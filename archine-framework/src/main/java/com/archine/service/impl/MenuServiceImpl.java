@@ -4,6 +4,7 @@ import com.archine.constants.SystemConstants;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Menu;
 import com.archine.domain.vo.MenuVo;
+import com.archine.domain.vo.TreeSelectVo;
 import com.archine.enums.AppHttpCodeEnum;
 import com.archine.mapper.MenuMapper;
 import com.archine.service.MenuService;
@@ -114,6 +115,37 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         //删除菜单
         removeById(id);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult treeSelect() {
+        //获取菜单树
+        List<MenuVo> menuTree = selectRouterMenuTreeByUserId(SecurityUtils.getUserId());
+        //将菜单树转换成TreeSelectVo
+        List<TreeSelectVo> treeSelectVoList = menuTree.stream()
+                .map(menuVo -> {
+                    TreeSelectVo treeSelectVo = new TreeSelectVo();
+                    treeSelectVo.setId(menuVo.getId());
+                    treeSelectVo.setLabel(menuVo.getMenuName());
+                    treeSelectVo.setParentId(menuVo.getParentId());
+
+                    // 将children属性转换成TreeSelectVo对象的列表
+                    List<TreeSelectVo> childrenList = menuVo.getChildren().stream()
+                            .map(child -> {
+                                TreeSelectVo childTreeSelectVo = new TreeSelectVo();
+                                childTreeSelectVo.setId(child.getId());
+                                childTreeSelectVo.setLabel(child.getMenuName());
+                                childTreeSelectVo.setParentId(child.getParentId());
+                                return childTreeSelectVo;
+                            })
+                            .collect(Collectors.toList());
+                    treeSelectVo.setChildren(childrenList);
+
+                    return treeSelectVo;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseResult.okResult(treeSelectVoList);
     }
 
 

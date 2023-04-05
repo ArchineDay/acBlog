@@ -11,6 +11,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class RoleDto {
 
+    private Long RoleId;
+
     //角色名称
     private String roleName;
 

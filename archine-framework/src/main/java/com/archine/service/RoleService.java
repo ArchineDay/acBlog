@@ -19,6 +19,8 @@ public interface RoleService extends IService<Role> {
     List<String> selectRoleKeyByUserId(Long id);
 
     ResponseResult getList(Integer pageNum, Integer pageSize, RoleDto roleDto);
+
+    ResponseResult changeStatus( RoleDto roleDto);
 }
 
 

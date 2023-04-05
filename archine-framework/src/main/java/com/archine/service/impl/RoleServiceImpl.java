@@ -50,6 +50,22 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         PageVo pageVos = new PageVo(page.getRecords(), page.getTotal());
         return ResponseResult.okResult(pageVos);
     }
+
+
+    @Override
+    public ResponseResult changeStatus(RoleDto roleDto) {
+
+        //从vo中获取角色id和状态
+        Long roleId = roleDto.getRoleId();
+        String status = roleDto.getStatus();
+        //获取角色
+        Role role = getById(roleId);
+        //修改角色状态
+        role.setStatus(status);
+        updateById(role);
+
+        return ResponseResult.okResult();
+    }
 }
 
 

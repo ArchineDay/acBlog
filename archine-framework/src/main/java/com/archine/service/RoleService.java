@@ -30,6 +30,8 @@ public interface RoleService extends IService<Role> {
     ResponseResult getRoleById(Long id);
 
     ResponseResult deleteRoleById(List<Long> id);
+
+    ResponseResult listAllRole();
 }
 
 

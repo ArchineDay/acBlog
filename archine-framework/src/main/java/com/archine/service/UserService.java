@@ -22,6 +22,8 @@ public interface UserService extends IService<User> {
     ResponseResult register(User user);
 
     ResponseResult getList(Integer pageNum, Integer pageSize, UserDto userDto);
+
+    ResponseResult addUser(UserDto userDto);
 }
 
 

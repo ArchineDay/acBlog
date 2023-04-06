@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
     @Autowired
     private RoleMenuService roleMenuService;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
@@ -135,6 +137,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public ResponseResult deleteRoleById(List<Long> id) {
         removeByIds(id);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult listAllRole() {
+        List<Role> roles = roleService.list();
+        return ResponseResult.okResult(roles);
     }
 
 }

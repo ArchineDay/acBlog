@@ -68,4 +68,12 @@
             m.parent_id,
             m.order_num
     </select>
+    <select id="selectMenuIdsByRoleId" resultType="java.lang.Long">
+        SELECT
+            menu_id
+        FROM
+            sys_role_menu rm
+        WHERE
+            rm.role_id = #{roleId}
+    </select>
 </mapper>

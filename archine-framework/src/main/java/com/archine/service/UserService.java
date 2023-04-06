@@ -1,6 +1,7 @@
 package com.archine.service;
 
 import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.UserDto;
 import com.archine.domain.entity.Link;
 import com.archine.domain.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -19,6 +20,8 @@ public interface UserService extends IService<User> {
     ResponseResult updateUserInfo(User user);
 
     ResponseResult register(User user);
+
+    ResponseResult getList(Integer pageNum, Integer pageSize, UserDto userDto);
 }
 
 

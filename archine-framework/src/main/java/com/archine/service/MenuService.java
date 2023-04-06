@@ -3,6 +3,7 @@ package com.archine.service;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Menu;
 import com.archine.domain.vo.MenuVo;
+import com.archine.domain.vo.TreeSelectVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -30,7 +31,9 @@ public interface MenuService extends IService<Menu> {
 
     ResponseResult deleteMenu(Long id);
 
-    ResponseResult treeSelect();
+    List<TreeSelectVo> treeSelect();
+
+    ResponseResult roleMenuTreeSelect(Long id);
 }
 
 

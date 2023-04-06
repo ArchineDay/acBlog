@@ -2,10 +2,13 @@ package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Menu;
+import com.archine.domain.vo.TreeSelectVo;
 import com.archine.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/system/menu")
@@ -40,6 +43,12 @@ public class MenuController {
 
     @GetMapping("/treeselect")
     public ResponseResult treeSelect(){
-        return menuService.treeSelect();
+        List<TreeSelectVo> treeSelectVos = menuService.treeSelect();
+        return ResponseResult.okResult(treeSelectVos) ;
+    }
+
+    @GetMapping("/roleMenuTreeselect/{id}")
+    public ResponseResult roleMenuTreeSelect(@PathVariable Long id){
+        return menuService.roleMenuTreeSelect(id);
     }
 }

@@ -3,16 +3,20 @@ package com.archine.service.impl;
 import com.archine.constants.SystemConstants;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.entity.Menu;
+import com.archine.domain.entity.RoleMenu;
 import com.archine.domain.vo.MenuVo;
 import com.archine.domain.vo.TreeSelectVo;
+import com.archine.domain.vo.roleMenuTreeselectVo;
 import com.archine.enums.AppHttpCodeEnum;
 import com.archine.mapper.MenuMapper;
 import com.archine.service.MenuService;
+import com.archine.service.RoleMenuService;
 import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -27,6 +31,8 @@ import java.util.stream.Collectors;
  */
 @Service("menuService")
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+    @Autowired
+    private RoleMenuService  roleMenuService;
 
     @Override
     public List<String> selectPermsByUserId(Long id) {
@@ -118,7 +124,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public ResponseResult treeSelect() {
+    public List<TreeSelectVo> treeSelect() {
         //获取菜单树
         List<MenuVo> menuTree = selectRouterMenuTreeByUserId(SecurityUtils.getUserId());
         //将菜单树转换成TreeSelectVo
@@ -130,22 +136,33 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
                     treeSelectVo.setParentId(menuVo.getParentId());
 
                     // 将children属性转换成TreeSelectVo对象的列表
-                    List<TreeSelectVo> childrenList = menuVo.getChildren().stream()
+                    List<TreeSelectVo> childTreeSelectVoList = menuVo.getChildren().stream()
                             .map(child -> {
                                 TreeSelectVo childTreeSelectVo = new TreeSelectVo();
                                 childTreeSelectVo.setId(child.getId());
                                 childTreeSelectVo.setLabel(child.getMenuName());
                                 childTreeSelectVo.setParentId(child.getParentId());
                                 return childTreeSelectVo;
-                            })
-                            .collect(Collectors.toList());
-                    treeSelectVo.setChildren(childrenList);
+                            }).collect(Collectors.toList());
 
+
+                    treeSelectVo.setChildren(childTreeSelectVoList);
                     return treeSelectVo;
                 })
                 .collect(Collectors.toList());
 
-        return ResponseResult.okResult(treeSelectVoList);
+        return treeSelectVoList;
+    }
+
+    @Override
+    public ResponseResult roleMenuTreeSelect(Long id) {
+        List<TreeSelectVo> treeSelectVoList = treeSelect();
+        //根据当前角色id获取关联菜单id
+        List<Long> menuIds = getBaseMapper().selectMenuIdsByRoleId(id);
+
+        roleMenuTreeselectVo roleMenuTreeselectVo = new roleMenuTreeselectVo(treeSelectVoList, menuIds);
+
+        return ResponseResult.okResult(roleMenuTreeselectVo);
     }
 
 

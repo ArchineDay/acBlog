@@ -3,18 +3,27 @@ package com.archine.service.impl;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.dto.RoleDto;
 import com.archine.domain.entity.Role;
+import com.archine.domain.entity.RoleMenu;
 import com.archine.domain.vo.PageVo;
+import com.archine.domain.vo.RoleVo;
 import com.archine.mapper.RoleMapper;
+import com.archine.service.MenuService;
+import com.archine.service.RoleMenuService;
 import com.archine.service.RoleService;
+import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 角色信息表(Role)表服务实现类
@@ -24,6 +33,8 @@ import java.util.List;
  */
 @Service("roleService")
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @Override
     public List<String> selectRoleKeyByUserId(Long id) {
@@ -55,7 +66,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public ResponseResult changeStatus(RoleDto roleDto) {
 
-        //从vo中获取角色id和状态
+        //从dto中获取角色id和状态
         Long roleId = roleDto.getRoleId();
         String status = roleDto.getStatus();
         //获取角色
@@ -66,6 +77,66 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult addRole(RoleDto roleDto) {
+        Role role = new Role();
+
+        role.setRoleName(roleDto.getRoleName());
+        role.setStatus(roleDto.getStatus());
+        role.setRoleSort(roleDto.getRoleSort());
+        role.setRemark(roleDto.getRemark());
+        role.setRoleKey(roleDto.getRoleKey());
+        save(role);
+        //添加角色菜单关联
+        return addRoleMenu(roleDto, role);
+    }
+
+    @Override
+    public ResponseResult updateRole(RoleDto roleDto) {
+        //获取角色
+        Long roleId = roleDto.getRoleId();
+        Role role = getById(roleId);
+        //修改角色信息
+        role.setRoleName(roleDto.getRoleName());
+        role.setStatus(roleDto.getStatus());
+        role.setRoleSort(roleDto.getRoleSort());
+        role.setRemark(roleDto.getRemark());
+        role.setRoleKey(roleDto.getRoleKey());
+        updateById(role);
+        //删除角色菜单关联
+        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, role.getId()));
+        //添加角色菜单关联
+        return addRoleMenu(roleDto, role);
+    }
+
+    @NotNull
+    private ResponseResult addRoleMenu(RoleDto roleDto, Role role) {
+        List<RoleMenu> roleMenus = roleDto.getMenuIds().stream()
+                .map(menuId -> {
+                    RoleMenu roleMenu = new RoleMenu();
+                    roleMenu.setRoleId(role.getId());
+                    roleMenu.setMenuId(menuId);
+                    return roleMenu;
+                })
+                .collect(Collectors.toList());
+        roleMenuService.saveBatch(roleMenus);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getRoleById(Long id) {
+        Role role = getById(id);
+        RoleVo roleVo = BeanCopyUtils.copyBean(role, RoleVo.class);
+        return ResponseResult.okResult(roleVo);
+    }
+
+    @Override
+    public ResponseResult deleteRoleById(List<Long> id) {
+        removeByIds(id);
+        return ResponseResult.okResult();
+    }
+
 }
 
 

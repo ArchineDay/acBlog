@@ -1,19 +1,15 @@
-package com.archine.domain.dto;
+package com.archine.domain.vo;
 
-import com.archine.domain.entity.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
-
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RoleDto {
-
-    private Long roleId;
+@NoArgsConstructor
+public class RoleVo {
+    private Long id;
 
     //角色名称
     private String roleName;

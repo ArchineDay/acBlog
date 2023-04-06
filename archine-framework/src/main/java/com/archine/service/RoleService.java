@@ -3,6 +3,7 @@ package com.archine.service;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.dto.RoleDto;
 import com.archine.domain.entity.Role;
+import com.archine.domain.vo.RoleVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -21,6 +22,14 @@ public interface RoleService extends IService<Role> {
     ResponseResult getList(Integer pageNum, Integer pageSize, RoleDto roleDto);
 
     ResponseResult changeStatus( RoleDto roleDto);
+
+    ResponseResult addRole(RoleDto roleDto);
+
+    ResponseResult updateRole(RoleDto roleDto);
+
+    ResponseResult getRoleById(Long id);
+
+    ResponseResult deleteRoleById(List<Long> id);
 }
 
 

@@ -1,10 +1,13 @@
 package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.UpdateUserDto;
 import com.archine.domain.dto.UserDto;
 import com.archine.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/system/user")
@@ -21,4 +24,21 @@ public class UserController {
     public ResponseResult addUser(@RequestBody UserDto userDto){
         return userService.addUser(userDto);
     }
+
+    @DeleteMapping("/{id}")
+    //PathVariable 用于获取url中的数据
+    public ResponseResult deleteUser(@PathVariable List<Long> id){
+        return userService.deleteUser(id);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseResult getUser(@PathVariable Long id){
+        return userService.getUser(id);
+    }
+
+    @PutMapping
+    public ResponseResult updateUser(@RequestBody UpdateUserDto userDto){
+        return userService.updateUser(userDto);
+    }
+
 }

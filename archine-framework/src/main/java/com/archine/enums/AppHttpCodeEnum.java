@@ -22,7 +22,8 @@ public enum AppHttpCodeEnum {
     EMAIL_NOT_NULL(511,"邮箱不能为空" ), NICKNAME_EXIST(512,"昵称已存在" ),
     TAG_EXIST(512,"标签已存在" ),
     PARENT_MENU_ERROR(513,"修改菜单失败，上级菜单不能选择自己" ), HAS_CHILDREN_MENU_ERROR(514,"存在子菜单不允许删除" ),
-    PHONE_EXIST(515,"手机号已存在" );
+    PHONE_EXIST(515,"手机号已存在" ),
+    CANNOT_DELETE_SELF(516, "不能删除自己" );
     int code;
     String msg;
 

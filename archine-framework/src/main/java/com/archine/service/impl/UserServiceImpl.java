@@ -1,14 +1,18 @@
 package com.archine.service.impl;
 
 import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.UpdateUserDto;
 import com.archine.domain.dto.UserDto;
+import com.archine.domain.entity.Role;
 import com.archine.domain.entity.User;
-import com.archine.domain.vo.PageVo;
-import com.archine.domain.vo.UserDetailVo;
-import com.archine.domain.vo.UserInfoVo;
+import com.archine.domain.entity.UserRole;
+import com.archine.domain.vo.*;
 import com.archine.enums.AppHttpCodeEnum;
 import com.archine.exception.SystemException;
+import com.archine.mapper.RoleMapper;
 import com.archine.mapper.UserMapper;
+import com.archine.service.RoleService;
+import com.archine.service.UserRoleService;
 import com.archine.service.UserService;
 import com.archine.utils.BeanCopyUtils;
 import com.archine.utils.SecurityUtils;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.xml.ws.Response;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +41,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleMapper roleMapper;
+    
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private UserRoleService userRoleService;
     @Override
     public ResponseResult userInfo() {
         //获取当前用户id
@@ -136,8 +149,58 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new SystemException(AppHttpCodeEnum.EMAIL_EXIST);
         }
         save(user);
+        //保存用户角色关系
+        List<UserRole> userRoleList = userDto.getRoleIds().stream()
+                .map(roleId -> new UserRole(user.getId(), roleId))
+                .collect(Collectors.toList());
+        userRoleService.saveBatch(userRoleList);
         return ResponseResult.okResult();
     }
+
+    @Override
+    public ResponseResult deleteUser(List<Long> id) {
+        //判断是否为当前用户
+        Long userId = SecurityUtils.getUserId();
+        if (id.contains(userId)){
+            throw new SystemException(AppHttpCodeEnum.CANNOT_DELETE_SELF);
+        }
+        removeByIds(id);
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getUser(Long id) {
+        User user = getById(id);
+        //根据用户id查询roleIds
+        List<Long> roleIds =roleMapper.findRoleIdsByUserId(id);
+        //查询所有角色
+        List<Role> roles = roleService.list();
+
+        getUserVo getUserVo = new getUserVo(roleIds, roles, user);
+        return ResponseResult.okResult(getUserVo);
+    }
+
+    @Override
+    public ResponseResult updateUser(UpdateUserDto userDto) {
+        //将userDto对象的属性逐一赋值给user对象的属性
+        User user = BeanCopyUtils.copyBean(userDto, User.class);
+        //删除原来的用户角色关联关系
+        LambdaQueryWrapper<UserRole> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserRole::getUserId,user.getId());
+        userRoleService.remove(queryWrapper);
+        //添加新的用户角色关联关系
+        userRoleService.saveBatch(userDto.getRoleIds().stream()
+                .map(roleId -> {
+                    UserRole userRole = new UserRole();
+                    userRole.setUserId(user.getId());
+                    userRole.setRoleId(roleId);
+                    return userRole;
+                })
+                .collect(Collectors.toList()));
+
+        return ResponseResult.okResult();
+    }
+
 
     private boolean emailExist(String email) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();

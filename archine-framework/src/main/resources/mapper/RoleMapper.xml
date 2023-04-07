@@ -12,4 +12,12 @@
           AND r.STATUS = 0
           AND r.del_flag = 0
     </select>
+    <select id="findRoleIdsByUserId" resultType="java.lang.Long">
+        SELECT
+            role_id
+        FROM
+            sys_user_role
+        WHERE
+            user_id = #{userId}
+    </select>
 </mapper>

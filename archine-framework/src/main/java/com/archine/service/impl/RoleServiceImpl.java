@@ -82,13 +82,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public ResponseResult addRole(RoleDto roleDto) {
-        Role role = new Role();
-
-        role.setRoleName(roleDto.getRoleName());
-        role.setStatus(roleDto.getStatus());
-        role.setRoleSort(roleDto.getRoleSort());
-        role.setRemark(roleDto.getRemark());
-        role.setRoleKey(roleDto.getRoleKey());
+        Role role = BeanCopyUtils.copyBean(roleDto, Role.class);
         save(role);
         //添加角色菜单关联
         return addRoleMenu(roleDto, role);
@@ -96,15 +90,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public ResponseResult updateRole(RoleDto roleDto) {
-        //获取角色
-        Long roleId = roleDto.getRoleId();
-        Role role = getById(roleId);
+        Role role = BeanCopyUtils.copyBean(roleDto, Role.class);
         //修改角色信息
-        role.setRoleName(roleDto.getRoleName());
-        role.setStatus(roleDto.getStatus());
-        role.setRoleSort(roleDto.getRoleSort());
-        role.setRemark(roleDto.getRemark());
-        role.setRoleKey(roleDto.getRoleKey());
         updateById(role);
         //删除角色菜单关联
         roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, role.getId()));

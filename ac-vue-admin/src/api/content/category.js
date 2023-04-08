@@ -1,5 +1,18 @@
 import request from '@/utils/request'
 import downloadService from '@/utils/downloadService'
+//状态改变
+export function changeCategoryStatus(categoryId, status) {
+  const data = {
+    categoryId,
+    status
+  }
+  return request({
+    url: '/content/category/changeStatus',
+    method: 'put',
+    data: data
+  })
+}
+
 
 // 查询分类列表
 export function listCategory(query) {

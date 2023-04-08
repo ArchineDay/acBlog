@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RoleDto {
 
-    private Long roleId;
+    private Long id;
 
     //角色名称
     private String roleName;

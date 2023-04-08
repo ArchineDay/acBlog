@@ -2,6 +2,7 @@ package com.archine.service.impl;
 
 import com.archine.domain.ResponseResult;
 import com.archine.domain.dto.RoleDto;
+import com.archine.domain.dto.RoleStatusDto;
 import com.archine.domain.entity.Role;
 import com.archine.domain.entity.RoleMenu;
 import com.archine.domain.vo.PageVo;
@@ -66,7 +67,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
 
     @Override
-    public ResponseResult changeStatus(RoleDto roleDto) {
+    public ResponseResult changeStatus(RoleStatusDto roleDto) {
 
         //从dto中获取角色id和状态
         Long roleId = roleDto.getRoleId();

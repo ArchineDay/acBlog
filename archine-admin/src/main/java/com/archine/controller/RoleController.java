@@ -2,6 +2,7 @@ package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
 import com.archine.domain.dto.RoleDto;
+import com.archine.domain.dto.RoleStatusDto;
 import com.archine.domain.vo.PageVo;
 import com.archine.domain.vo.RoleVo;
 import com.archine.service.RoleService;
@@ -23,14 +24,12 @@ public class RoleController {
     }
 
     @PutMapping("/changeStatus")
-    public ResponseResult changeStatus(@RequestBody RoleDto roleDto){
-
+    public ResponseResult changeStatus(@RequestBody RoleStatusDto roleDto){
         return roleService.changeStatus(roleDto);
     }
 
     @PostMapping
     public  ResponseResult addRole(@RequestBody RoleDto roleDto){
-
         return roleService.addRole(roleDto);
     }
 
@@ -52,7 +51,6 @@ public class RoleController {
     @GetMapping("/listAllRole")
     public ResponseResult listAllRole(){
         return roleService.listAllRole();
-
     }
 
 

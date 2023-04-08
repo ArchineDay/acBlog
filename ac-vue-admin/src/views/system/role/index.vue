@@ -321,7 +321,7 @@ export default {
       (this.menuNodeAll = false),
       (this.menuExpand = false),
       (this.form = {
-        id: undefined,
+        roleId: undefined,
         roleName: undefined,
         roleKey: undefined,
         roleSort: 0,
@@ -391,7 +391,7 @@ export default {
     submitForm: function() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          if (this.form.roleId !== undefined) {
+          if (this.form.id !== undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys()
             updateRole(this.form).then((response) => {
               this.$modal.msgSuccess('修改成功')

@@ -3,6 +3,7 @@ package com.archine.service.impl;
 import com.archine.domain.ResponseResult;
 import com.archine.domain.dto.UpdateUserDto;
 import com.archine.domain.dto.UserDto;
+import com.archine.domain.dto.UserStatusDto;
 import com.archine.domain.entity.Role;
 import com.archine.domain.entity.User;
 import com.archine.domain.entity.UserRole;
@@ -198,6 +199,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 })
                 .collect(Collectors.toList()));
 
+        return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult changeStatus(UserStatusDto userDto) {
+        Long userDtoId = userDto.getUserId();
+        User user = getById(userDtoId);
+        user.setStatus(userDto.getStatus());
+        updateById(user);
         return ResponseResult.okResult();
     }
 

@@ -1,8 +1,11 @@
 package com.archine.service;
 
 import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.LinkDto;
 import com.archine.domain.entity.Link;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 
 /**
@@ -14,6 +17,16 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface LinkService extends IService<Link> {
 
     ResponseResult getAllLink();
+
+    ResponseResult list(Integer pageNum, Integer pageSize, LinkDto linkDto);
+
+    ResponseResult addList(LinkDto linkDto);
+
+    ResponseResult getLinkById(Long id);
+
+    ResponseResult updateLink(LinkDto linkDto);
+
+    ResponseResult deleteLink(List<Long> id );
 }
 
 

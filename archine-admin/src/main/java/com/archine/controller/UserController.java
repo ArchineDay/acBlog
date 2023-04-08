@@ -1,8 +1,11 @@
 package com.archine.controller;
 
 import com.archine.domain.ResponseResult;
+import com.archine.domain.dto.RoleDto;
 import com.archine.domain.dto.UpdateUserDto;
 import com.archine.domain.dto.UserDto;
+import com.archine.domain.dto.UserStatusDto;
+import com.archine.domain.entity.User;
 import com.archine.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +42,11 @@ public class UserController {
     @PutMapping
     public ResponseResult updateUser(@RequestBody UpdateUserDto userDto){
         return userService.updateUser(userDto);
+    }
+
+    @PutMapping("/changeStatus")
+    public ResponseResult changeStatus(@RequestBody UserStatusDto userDto){
+        return userService.changeStatus(userDto);
     }
 
 }

@@ -30,9 +30,9 @@ export default {
 
 	},
 	components: { //定义组件
-		'sg-nav': header,
-		'sg-articlelist': articlelist,
-		'sg-rightlist': rightlist,
+		'ac-nav': header,
+		'ac-articlelist': articlelist,
+		'ac-rightlist': rightlist,
 	},
 
 	created() { //生命周期函数

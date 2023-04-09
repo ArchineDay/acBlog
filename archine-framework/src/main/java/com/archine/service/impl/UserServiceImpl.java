@@ -185,6 +185,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public ResponseResult updateUser(UpdateUserDto userDto) {
         //将userDto对象的属性逐一赋值给user对象的属性
         User user = BeanCopyUtils.copyBean(userDto, User.class);
+        updateById(user);
         //删除原来的用户角色关联关系
         LambdaQueryWrapper<UserRole> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserRole::getUserId,user.getId());

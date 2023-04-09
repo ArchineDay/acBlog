@@ -57,6 +57,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(StringUtils.hasText(roleDto.getRoleName()),Role::getRoleName, roleDto.getRoleName());
         queryWrapper.like(StringUtils.hasText(roleDto.getStatus()),Role::getStatus, roleDto.getStatus());
+        //按照升序排序
+        queryWrapper.orderByAsc(Role::getRoleSort);
 
         Page<Role> page = new Page<>(pageNum, pageSize);
         page(page, queryWrapper);

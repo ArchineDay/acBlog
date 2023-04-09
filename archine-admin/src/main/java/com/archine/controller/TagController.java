@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/content/tag")
 public class TagController {
@@ -26,7 +28,7 @@ public class TagController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseResult deleteTag(@PathVariable("id") Long id){
+    public ResponseResult deleteTag(@PathVariable("id") List<Long> id){
         return tagService.deleteTag(id);
     }
 

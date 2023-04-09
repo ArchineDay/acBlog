@@ -33,8 +33,6 @@ public class UpdateViewCountJob{
                 .map(entry -> new Article(Long.valueOf(entry.getKey()), entry.getValue().longValue()))
                 .collect(Collectors.toList());
         //更新到数据库中
-        //q：为什么要用updateBatchById()而不是updateById()？
-        //a：因为updateById()只能更新一条数据，而updateBatchById()可以更新多条数据
         articleService.updateBatchById(articles);
 
     }

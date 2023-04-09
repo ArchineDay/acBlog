@@ -31,6 +31,14 @@ public class SecurityUtils
     }
 
     public static Long getUserId() {
-        return getLoginUser().getUser().getId();
+        Long userId;
+        try {
+            userId = getLoginUser().getUser().getId();
+        } catch (Exception e) {
+//            e.printStackTrace();
+            userId = -1L; // 表示是自己创建
+        }
+        return userId;
     }
+
 }

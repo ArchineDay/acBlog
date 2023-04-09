@@ -37,9 +37,9 @@ public class Link  {
     //审核状态 (0代表审核通过，1代表审核未通过，2代表未审核)
     private String status;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;

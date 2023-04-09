@@ -37,18 +37,18 @@ const permission = {
     GenerateRoutes({ commit }) {
       return new Promise(resolve => {
         // 向后端请求路由数据   直接获取routers 暂时注释
-        // getRouters().then(res => {
-        //   const sdata = JSON.parse(JSON.stringify(res.routers))
-        //   const rdata = JSON.parse(JSON.stringify(res.routers))
-        //   const sidebarRoutes = filterAsyncRouter(sdata)
-        //   const rewriteRoutes = filterAsyncRouter(rdata, false, true)
-        //   rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
-        //   commit('SET_ROUTES', rewriteRoutes)
-        //   commit('SET_SIDEBAR_ROUTERS', constantRoutes.concat(sidebarRoutes))
-        //   commit('SET_DEFAULT_ROUTES', sidebarRoutes)
-        //   commit('SET_TOPBAR_ROUTES', sidebarRoutes)
-        //   resolve(rewriteRoutes)
-        // })
+        getRouters().then(res => {
+          const sdata = JSON.parse(JSON.stringify(res.routers))
+          const rdata = JSON.parse(JSON.stringify(res.routers))
+          const sidebarRoutes = filterAsyncRouter(sdata)
+          const rewriteRoutes = filterAsyncRouter(rdata, false, true)
+          rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
+          commit('SET_ROUTES', rewriteRoutes)
+          commit('SET_SIDEBAR_ROUTERS', constantRoutes.concat(sidebarRoutes))
+          commit('SET_DEFAULT_ROUTES', sidebarRoutes)
+          commit('SET_TOPBAR_ROUTES', sidebarRoutes)
+          resolve(rewriteRoutes)
+        })
 
         getRouters().then(res => {
           // 获取menus 自己组装routers
@@ -68,6 +68,7 @@ const permission = {
     }
   }
 }
+
 function buildRouterTree(menus) {
   // 遍历menus
   var routers = []

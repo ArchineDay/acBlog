@@ -6,6 +6,8 @@ import com.archine.domain.entity.Tag;
 import com.archine.domain.vo.PageVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 
 /**
  * 标签(Tag)表服务接口
@@ -20,7 +22,7 @@ public interface TagService extends IService<Tag> {
     ResponseResult addTag(Tag tag);
     
 
-    ResponseResult deleteTag(Long id);
+    ResponseResult deleteTag(List<Long> id);
 
     ResponseResult getTag(Long id);
 

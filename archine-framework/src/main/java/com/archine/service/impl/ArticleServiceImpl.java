@@ -191,9 +191,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
     }
 
     @Override
-    public ResponseResult deleteArticle(Long id) {
+    public ResponseResult deleteArticle(List<Long> id) {
         //删除文章
-        removeById(id);
+        removeByIds(id);
         return ResponseResult.okResult();
     }
 

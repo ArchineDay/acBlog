@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       title: 'Vue Admin Template',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      logo: 'https://dxq-images.oss-cn-shanghai.aliyuncs.com/Archine/img/%E4%BA%94%E6%9D%A1%E6%82%9F.jpg'
     }
   }
 }

@@ -80,14 +80,26 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(list, CommentVo.class);
         //遍历vo集合
         for (CommentVo commentVo : commentVos) {
-            //通过creatyBy查询本用户的昵称并赋值
-            String nickName = userService.getById(commentVo.getCreateBy()).getNickName();
-            commentVo.setUsername(nickName);
+            //通过createBy查询本用户的昵称并赋值
+            //如果用户不存在则显示用户不存在
+            if (userService.getById(commentVo.getCreateBy())==null){
+                commentVo.setUsername("用户不存在");
+            }else {
+                String nickName = userService.getById(commentVo.getCreateBy()).getNickName();
+                commentVo.setUsername(nickName);
+            }
+
             //通过toCommentUserId查询回复用户的昵称并赋值
             //如果toCommentUserId不为-1才进行查询
-            if(commentVo.getToCommentUserId()!=-1){
-                String toCommentUserName = userService.getById(commentVo.getToCommentUserId()).getNickName();
-                commentVo.setToCommentUserName(toCommentUserName);
+            if(!commentVo.getToCommentUserId().equals(-1L)){
+                //判断回复的用户是否存在
+                if(userService.getById(commentVo.getToCommentUserId())==null){
+                    commentVo.setToCommentUserName("用户不存在");
+                }
+                else {
+                    String toCommentUserName = userService.getById(commentVo.getToCommentUserId()).getNickName();
+                    commentVo.setToCommentUserName(toCommentUserName);
+                }
             }
         }
         return commentVos;

@@ -51,7 +51,6 @@ public class CategoryController {
             WebUtils.renderString(response, JSON.toJSONString(errorResult));
 
         }
-
     }
 
     @GetMapping("/list")

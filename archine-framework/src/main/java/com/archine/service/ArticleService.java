@@ -8,6 +8,8 @@ import com.archine.domain.vo.ArticleVo;
 import com.archine.domain.vo.PageVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 public interface ArticleService extends IService<Article> {
     ResponseResult hotArticleList();
     ResponseResult articleList(Integer pageNum, Integer pageSize, Long categoryId);
@@ -22,5 +24,5 @@ public interface ArticleService extends IService<Article> {
 
     ResponseResult updateArticle(AddArticleDto articleDto);
 
-    ResponseResult deleteArticle(Long id);
+    ResponseResult deleteArticle(List<Long> id);
 }

@@ -17,11 +17,11 @@ public class ArticleListVo {
     private String summary;
     //所属分类名
     private String categoryName;
-    //缩略图
-    private String status;
     //访问量
     private Long viewCount;
     //创建时间
     private Date createTime;
+
+    private String thumbnail;
 
 }

@@ -16,7 +16,7 @@
         </h1>
       </div>
       <div class="r1-body">
-        <p>三更</p>
+        <p>Archie</p>
         <div class="catch-me">
           <div class="">
             <el-tooltip class="item" content="Github" placement="top">
@@ -121,10 +121,10 @@ export default {
       artCommentList: "", //最新评论
       catchMeObj: {
         //个人信息
-        git: "https://gitee.com",
-        qq: "/static/img/qq.png",
+        git: "https://github.com/ArchineDay/acBlog",
+        qq: "/static/img/qq.jpg",
         sina: "https://weibo.com",
-        wechat: "/static/img/qq.jpg",
+        wechat: "/static/img/202110231419595.png",
         csdn: "http://www.csdn.cn",
         job: "https://www.baidu.com",
       },

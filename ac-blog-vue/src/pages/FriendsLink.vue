@@ -1,15 +1,15 @@
 <!-- 友情链接 -->
 <template>
     <div>
-        <sg-nav></sg-nav>
+        <ac-nav></ac-nav>
         <div class="container">
             <el-row  :gutter="30">
                 <el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
-                    <sg-friends></sg-friends>
-                    <sg-message></sg-message>
+                    <ac-friends></ac-friends>
+                    <ac-message></ac-message>
                 </el-col>
                 <el-col :sm="24"  :md="8" >
-                    <sg-rightlist></sg-rightlist>
+                    <ac-rightlist></ac-rightlist>
                 </el-col>
             </el-row>
         </div>
@@ -32,10 +32,10 @@ import message from '../components/message.vue'
 
         },
         components: { //定义组件
-            'sg-nav':header,
-            'sg-message':message,
-            'sg-friends':friends,
-            'sg-rightlist':rightlist,
+            'ac-nav':header,
+            'ac-message':message,
+            'ac-friends':friends,
+            'ac-rightlist':rightlist,
         },
         created() { //生命周期函数
 

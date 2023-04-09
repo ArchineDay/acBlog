@@ -1,14 +1,14 @@
 <!-- 文章列表 -->
 <template>
 <div>
-	<sg-nav></sg-nav>
+	<ac-nav></ac-nav>
 	<div class="container">
 		<el-row :gutter="30">
 			<el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
-				<sg-articlelist></sg-articlelist>
+				<ac-articlelist></ac-articlelist>
 			</el-col>
 			<el-col :sm="24" :md="8">
-				<sg-rightlist></sg-rightlist>
+				<ac-rightlist></ac-rightlist>
 			</el-col>
 		</el-row>
 	</div>

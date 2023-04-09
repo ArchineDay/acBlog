@@ -103,7 +103,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>imple
         page(page,lambdaQueryWrapper);
 
         //查询categoryName和viewCount
-
         List<Article> articles = page.getRecords();
         Map<String, Integer> viewCount = redisCache.getCacheMap(SystemConstants.ARTICLE_VIEWCOUNT);
         /**

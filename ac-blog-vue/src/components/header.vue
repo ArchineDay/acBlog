@@ -12,7 +12,7 @@
 							<template slot="title"><i class="fa fa-wa fa-archive"></i> 分类</template>
 							<el-menu-item v-for="(item,index) in classListObj" :key="'class1'+index" :index="'/Share?classId='+item.id">{{item.name}}</el-menu-item>
 						</el-submenu>
-						<el-menu-item index="/Reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>
+<!--						<el-menu-item index="/Reward"><i class="fa fa-wa fa-cny"></i> 赞赏</el-menu-item>-->
 						<el-menu-item index="/Friendslink"><i class="fa fa-wa fa-users"></i>友链</el-menu-item>
 
 						<div class="userInfo">
@@ -41,12 +41,11 @@
 			<div><span id="luke"></span></div>
 		</div>
 		<div class="h-information">
-
-                    <img :src="this.$store.state.themeObj.head_portrait?this.$store.state.themeObj.head_portrait:'static/img/tou.png'" alt="">
+                    <img :src="this.$store.state.themeObj.head_portrait?this.$store.state.themeObj.head_portrait:'static/img/五条悟.jpg'" alt="">
 
 			<h2 class="h-description">
 
-                        {{this.$store.state.themeObj.autograph?this.$store.state.themeObj.autograph:"三更灯火五更鸡，正是男儿读书时"}}
+                        {{this.$store.state.themeObj.autograph?this.$store.state.themeObj.autograph:"记录个人技术学习与成长"}}
 
                 </h2>
 		</div>
@@ -76,9 +75,7 @@ export default {
 			projectList: '' //项目列表
 		}
 	},
-	watch: {
 
-	},
 	methods: { //事件处理器
 		handleOpen(key, keyPath) { //分组菜单打开
 			// console.log(key, keyPath);

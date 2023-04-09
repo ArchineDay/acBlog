@@ -1,14 +1,14 @@
 <!-- 赞赏页面 -->
 <template>
 <div>
-	<sg-nav></sg-nav>
+	<ac-nav></ac-nav>
 	<div class="container">
 		<el-row :gutter="30">
 			<el-col :sm="24" :md="16" style="transition:all .5s ease-out;margin-bottom:30px;">
-				<sg-reward></sg-reward>
+				<ac-reward></ac-reward>
 			</el-col>
 			<el-col :sm="24" :md="8">
-				<sg-rightlist></sg-rightlist>
+				<ac-rightlist></ac-rightlist>
 			</el-col>
 		</el-row>
 	</div>
@@ -30,9 +30,9 @@ export default {
 
 	},
 	components: { //定义组件
-		'sg-nav': header,
-		'sg-reward': reward,
-		'sg-rightlist': rightlist,
+		'ac-nav': header,
+		'ac-reward': reward,
+		'ac-rightlist': rightlist,
 	},
 	created() { //生命周期函数
 

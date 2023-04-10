@@ -2,6 +2,7 @@ package com.archine.job;
 
 import com.archine.constants.SystemConstants;
 import com.archine.domain.entity.Article;
+import com.archine.mapper.ArticleMapper;
 import com.archine.service.ArticleService;
 import com.archine.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class UpdateViewCountJob{
     @Autowired
     private ArticleService articleService;
 
+
     @Scheduled(cron = "0/60 * * * * ?")
     public void updateViewCount(){
         //获取Redis中的浏览量
@@ -33,6 +35,7 @@ public class UpdateViewCountJob{
                 .map(entry -> new Article(Long.valueOf(entry.getKey()), entry.getValue().longValue()))
                 .collect(Collectors.toList());
         //更新到数据库中
+        
         articleService.updateBatchById(articles);
 
     }
